@@ -21,16 +21,16 @@ export default function TaskList() {
 
   // Delete a task with confirmation
   const deleteTask = async (id) => {
-    setError('');
-    const confirm = window.confirm('Are you sure you want to delete this task?');
-    if (!confirm) return;
+    const confirmed = window.confirm('Are you sure you want to delete this task?');
+    if (!confirmed) return;
 
     try {
       await API.delete(`/api/tasks/${id}`);
-      getTasks(); // refresh tasks
+      getTasks();
     } catch (err) {
       console.error('Error deleting task:', err.response?.data || err);
       setError(err.response?.data?.message || 'Failed to delete task');
+      alert(err.response?.data?.message || 'Failed to delete task');
     }
   };
 
@@ -43,7 +43,7 @@ export default function TaskList() {
       <h2>Your Tasks</h2>
       {error && <p className="error">{error}</p>}
 
-      {/* TaskForm for adding or editing */}
+      {/* TaskForm for add/edit */}
       <TaskForm
         refresh={getTasks}
         editTask={editTask}

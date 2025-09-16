@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import API from '../api';
 import { useNavigate } from 'react-router-dom';
 
-export default function Login() {
+export default function Login({ setIsLoggedIn }) { // <--- receive state updater from App
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,7 +14,11 @@ export default function Login() {
     try {
       const res = await API.post('/api/auth/login', { email, password });
       console.log('Login response:', res.data);
+
+      // Save token and update login state
       localStorage.setItem('token', res.data.token);
+      setIsLoggedIn(true); // <-- update App state
+
       nav('/'); // Go to home (TaskList) after login
     } catch (err) {
       console.error('Frontend login error:', err.response?.data || err);
